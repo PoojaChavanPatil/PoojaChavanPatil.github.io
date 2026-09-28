@@ -1169,6 +1169,39 @@ footer p { font-size: 0.75rem; }
 <script>
 const PROJECTS = [
   {
+    id: 'securite',
+    featured: false,
+    color: 'purple',
+    emoji: '🔒',
+    badge: '🔥 FEATURED',
+    badgeClass: 'badge-new',
+    title: 'SecurITe — Unsupervised Network Intrusion Detection',
+    subtitle: 'Commissioned by a cybersecurity company · CIC-IDS2017 · 5 unsupervised models · 14 attack types',
+    desc: 'Unsupervised anomaly detection for network intrusion on CIC-IDS2017, built after a cybersecurity company asked me to work on it — trained only on normal traffic, with no attack labels ever shown during training. Five models (Isolation Forest, One-Class SVM, LOF, PCA, Autoencoder) each learn "normal" differently and flag deviations. Includes a stratified sampling fix to preserve rare attacks, severity tiering (Low/Medium/High), and a real domain-shift/drift test simulating deployment at a second site.',
+    metrics: [
+      {val:'5', lbl:'Models'},
+      {val:'14', lbl:'Attack Types'},
+      {val:'72%', lbl:'LOF Alert Rate'},
+      {val:'11.49%', lbl:'Drift False-Alarm'},
+    ],
+    findings: [
+      'Fixed a hidden sampling bug that nearly erased rare attacks (Heartbleed: 11 rows, Infiltration: 36) — stratified sampling now guarantees every attack type appears.',
+      'LOF was the loudest model (~72% alert rate) but also caught the most real attacks; One-Class SVM was quietest but missed the most — "loud" isn\'t automatically "bad."',
+      'Requiring 2+ models to agree cut false alarms but also missed attacks only LOF caught — an idea that didn\'t fully work, kept honest instead of hidden.',
+      'Built Low/Medium/High severity tiers; confirmed higher severity meant higher confidence for 4 of 5 models — LOF broke the pattern, a genuinely surprising finding.',
+      'Simulated a second deployment site: PSI/KS drift tests looked mild, but the trained model still mis-flagged 11.49% of normal traffic as attacks — more than double the baseline.',
+    ],
+    deepFindings: [
+      {icon:'🕵️', title:'Unsupervised by Design', body:'The model only ever sees normal (Monday) traffic during training — no attack labels. Anything that deviates from learned "normal" gets flagged, then labels are used only at evaluation to check performance.'},
+      {icon:'🐛', title:'The Rare-Attack Sampling Bug', body:'Random sampling nearly erased ultra-rare attacks like Heartbleed (11 total rows) and Infiltration (36 rows). Fixed by capping common attacks at 20,000 rows while guaranteeing every rare attack keeps all its rows — all 14 attack types now show up reliably.'},
+      {icon:'🔊', title:'Loud vs. Quiet Models', body:'LOF flagged ~72% of traffic and caught the most attacks; One-Class SVM flagged under half but missed the most. Alert volume alone doesn\'t tell you if a model is good — you have to look at what it actually catches.'},
+      {icon:'🌐', title:'Testing for Real-World Domain Shift', body:'Simulated deploying the model at a "second site" by testing it on other days\' normal traffic. Feature-level drift tests (PSI, KS) looked mild, but the model\'s real false-alarm rate on that traffic was 11.49% — proof that small shifts across many features can compound into real production impact.'},
+    ],
+    tags: ['ml'],
+    techs: ['Python', 'scikit-learn', 'Isolation Forest', 'One-Class SVM', 'LOF', 'PCA', 'Autoencoder', 'PSI/KS Drift Testing'],
+    links: [{label:'🐙 GitHub', href:'https://github.com/PoojaChavanPatil/securite-anomaly-detection_updated'}]
+  },
+  {
     id: 'payguard',
     featured: true,
     color: 'red',
